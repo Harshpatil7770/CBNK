@@ -1,5 +1,7 @@
 package com.cli.bnk.dto;
 
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +19,5 @@ public class BranchDTO {
 
 	private String pinCode;
 
-	private BranchAddressDTO branchAddressDTO;
+	BranchAddressDTO branchAddressDTO;
 }
