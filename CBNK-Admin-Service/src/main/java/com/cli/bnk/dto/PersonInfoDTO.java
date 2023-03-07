@@ -23,7 +23,5 @@ public class PersonInfoDTO {
 
 	private long mobileNo;
 
-	private User user;
-
 	private PersonAddressDTO personAddressDTO;
 }
