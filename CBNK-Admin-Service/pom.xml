@@ -11,6 +11,11 @@
 	<groupId>com.cli</groupId>
 	<artifactId>CBNK-Admin-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<!--<profiles>
+		<profile>
+			<id>proxy</id>
+		</profile>
+	</profiles>-->
 	<name>CBNK-Admin-Service</name>
 	<description>Admin service used to peform manager crud operations</description>
 	<properties>
@@ -74,6 +79,16 @@
 			<groupId>com.cli</groupId>
 			<artifactId>CBNK-DTO-Service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!--<dependency>
+			<groupId>com.cli.bnk</groupId>
+			<artifactId>DTO-Service</artifactId>
+			<version>2.7.9</version>
+		</dependency>-->
+		<dependency>
+			<groupId>com.cli</groupId>
+			<artifactId>CBNK-DTO-Service</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
