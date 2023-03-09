@@ -9,7 +9,7 @@ import com.cli.bnk.model.User;
 @Repository
 public interface UserDao extends JpaRepository<User, Long> {
 
-	@Query(value = "select max(user_id) from user u inner join manager m where u.user_id=m.manager_id", nativeQuery = true)
+	@Query(value = "select max(user_id) from user_info u inner join manager m where u.user_id=m.manager_id", nativeQuery = true)
 	Long findLastUserId();
 
 }

@@ -11,7 +11,9 @@ public class ManagerDTO {
 
 	private long managerId;
 
-	private BranchDTO branchDTO;
+	private long branchId;
+	
+	private boolean operationDetails;
 
 	private UserDTO userDTO;
 }
