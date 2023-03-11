@@ -73,23 +73,22 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
-			<version>4.0.1</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.cli</groupId>
 			<artifactId>CBNK-DTO-Service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency>-->
 		<!--<dependency>
 			<groupId>com.cli.bnk</groupId>
 			<artifactId>DTO-Service</artifactId>
 			<version>2.7.9</version>
 		</dependency>-->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.cli</groupId>
 			<artifactId>CBNK-DTO-Service</artifactId>
 			<version>1.0</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
