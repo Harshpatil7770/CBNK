@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -47,6 +48,7 @@ public class PersonInfo {
 
 	@OneToOne
 	@Cascade(CascadeType.ALL)
+	@JoinColumn(name="PERSON_ADDRESS_ID")
 	private PersonAddress address;
 
 }

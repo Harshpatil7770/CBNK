@@ -76,7 +76,7 @@ public class ManagerServiceImpl implements ManagerService {
 	private static final long INITIAL_PERSON_ADDRESS_ID = 1;
 
 	/**
-	 * addNewManager and also them branch
+	 * addNewManager details and assign him branch
 	 */
 	@Override
 	public void addNewManager(ManagerDTO managerDTO) {
@@ -111,16 +111,16 @@ public class ManagerServiceImpl implements ManagerService {
 	 * @param managerDTO
 	 * @return
 	 */
-	private ManagerDTO validateBrancheDetails(ManagerDTO managerDTO) {
+	private void validateBrancheDetails(ManagerDTO managerDTO) {
 		Branch branch = branchDao.isBranchAvailable(managerDTO.getBranchId());
 		if (branch == null) {
 			managerDTO.setOperationDetails(false);
-			return managerDTO;
+			return;
 		}
 		managerDTO.setOperationDetails(true);
 		manager.setBranchId(managerDTO.getBranchId());
 		logger.info("Branch detailed added {} ", manager);
-		return managerDTO;
+		// return managerDTO;
 	}
 
 	/**

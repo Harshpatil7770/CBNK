@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
-/*
+/**
  * @SpringBootApplication - It is combinations of three annotations. It shows main class of your
  *                          SpringBootApplication
  * @EnableAutoConfiuration - It configure your application automatically based on their dependencies
@@ -27,7 +27,7 @@ public class CbnkEurekaServerApplication {
 		System.out.println("****************************************************");
 		System.out.println("****************************************************");
 
-		/*
+		/**
 		 * What is purpose of eureka server and How to create it?
 		 * 
 		 * To enable eureka server we need to add Enable Eureka Server dependencies. and

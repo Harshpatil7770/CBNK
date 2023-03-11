@@ -41,6 +41,7 @@ public class Manager {
 
 	@OneToOne
 	@Cascade(CascadeType.ALL)
+	@JoinColumn(name="MANAGER_USER_ID")
 	private User user;
 
 	@Override
