@@ -9,7 +9,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cli</groupId>
-	<artifactId>CBNK-Admin-Service</artifactId>
+	<artifactId>CBNK-Management-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<!--<profiles>
 		<profile>
