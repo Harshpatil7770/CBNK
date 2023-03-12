@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.config.server.EnableConfigServer;
 
-/*
+/**
  * @SpringBootApplication 
  * It is combination of three annotations.
  * @EnableAutoConfiguration it configure application automatically based on their dependencies
@@ -18,7 +18,7 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @EnableConfigServer
 public class  CbnkConfigServerApplication{
 
-	/*
+	/**
 	 * Purpose of config server and How to enable it?
 	 * 
 	 * To enable config server first we need to add spring cloud config server
