@@ -3,6 +3,8 @@ package com.cli.bnk.resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +26,10 @@ public class ManagerResource {
 
 	@PostMapping("/save")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-	public void addNewManager(@RequestBody ManagerDTO managerVO) {
+	public ResponseEntity<?> addNewManager(@RequestBody ManagerDTO managerVO) {
 		Thread.currentThread().setName("ManagerResource-" + System.currentTimeMillis() + "-Thread");
 		logger.info("Recived Manager details : {}", managerVO);
 		adminService.addNewManager(managerVO);
+		return new ResponseEntity<>(managerVO, HttpStatus.CREATED);
 	}
 }

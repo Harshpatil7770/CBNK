@@ -3,6 +3,8 @@ package com.cli.bnk.resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ public class BranchResource {
 
 	@PostMapping("/save")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-	public void addNewBranch(@RequestBody BranchDTO branchDTO) throws Exception {
+	public ResponseEntity<?> addNewBranch(@RequestBody BranchDTO branchDTO) throws Exception {
 		if (branchDTO != null) {
 
 			Thread.currentThread().setName("BranchResource-" + System.currentTimeMillis() + "-Thread");
@@ -32,5 +34,6 @@ public class BranchResource {
 			branchService.addNewBranch(branchDTO);
 			logger.info("Added New Branch Succesfully");
 		}
+		return new ResponseEntity<>(branchDTO, HttpStatus.CREATED);
 	}
 }

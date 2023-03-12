@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ import com.cli.bnk.model.PersonAddress;
 import com.cli.bnk.model.PersonInfo;
 import com.cli.bnk.model.Role;
 import com.cli.bnk.model.User;
+import com.cli.bnk.outboundmsgsender.ManagementMsgSender;
+import com.cli.bnk.util.ErrorCode;
+import com.cli.bnk.util.ErrorController;
 
 /**
  * 
@@ -58,22 +62,36 @@ public class ManagerServiceImpl implements ManagerService {
 	@Autowired(required = true)
 	private PersonInfo personInfo;
 
-	@Autowired(required = true)
+	@Autowired
 	private PersonInfoDao personInfoDao;
 
 	@Autowired
 	private BranchAddressDAO addressDao;
 
-	@Autowired(required = true)
+	@Autowired
 	private BranchAddress branchAddress;
 
-	@Autowired(required = true)
+	@Autowired
 	private PersonAddress personalAddress;
 
 	@Autowired
 	private PersonAddressDao personAddressDao;
 
+	@Autowired
+	private ManagementMsgSender managementMsgSender;
+
+	@Autowired
+	private ErrorController errorController;
+
 	private static final long INITIAL_PERSON_ADDRESS_ID = 1;
+
+	int retryCount = 0;
+
+	@Value("${CBNK_RETRY_COUNT}")
+	private int CBNK_RETRY_COUNT;
+
+	@Value("${CBNK_WAIT_TIME}")
+	private int CBNK_WAIT_TIME;
 
 	/**
 	 * addNewManager details and assign him branch
@@ -81,28 +99,62 @@ public class ManagerServiceImpl implements ManagerService {
 	@Override
 	public void addNewManager(ManagerDTO managerDTO) {
 
-		/**
-		 * validate the entered branch id is available or not
-		 */
-		validateBrancheDetails(managerDTO);
+		try {
+			/**
+			 * validate the entered branch id is available or not
+			 */
+			validateBrancheDetails(managerDTO);
 
-		if (!managerDTO.isOperationDetails()) {
-			logger.error("Entered branch id not available. No Need to procced further.");
-			return;
+			if (!managerDTO.isOperationDetails()) {
+				logger.error("Entered branch id not available. No Need to procced further.");
+				return;
+			}
+
+			/**
+			 * set manager related info
+			 */
+			validateUserDetails(managerDTO);
+
+			Long lastManagerId = managerDao.findLastManagerId();
+			if (lastManagerId != null) {
+				manager.setManagerId(++lastManagerId);
+			}
+
+			persistData(manager);
+		} catch (Exception e) {
+
+			logger.error("CALLBACK");
 		}
+		logger.info("CALLBACK");
+	}
 
-		/**
-		 * set manager related info
-		 */
-		validateUserDetails(managerDTO);
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	private void persistData(Manager manager) throws Exception {
+		try {
+			managerDao.save(manager);
+			manager.getUser().setUserName("ENCRYPTED DATA");
+			manager.getUser().setPassword("ENCRYPTED DATA");
+			manager.getUser().setSecurityQuestion("ENCRYPTED DATA");
+			manager.getUser().setSecurityQuestion("ENCRYPTED DATA");
+			managementMsgSender.msgSendingToParticipantQueue(manager);
+		} catch (Exception e) {
+			logger.error("Exception occured while sending msg or saving data to database ", e.getMessage());
+			retryCount++;
+			if (retryCount < CBNK_RETRY_COUNT) {
+				try {
+					Thread.sleep(retryCount * CBNK_WAIT_TIME);
+					logger.info("Re-routing message again count {} ", retryCount);
+					persistData(manager);
+				} catch (Exception ex) {
+					logger.error("Exception occured Re-routing message ", e.getMessage());
+				}
 
-		Long lastManagerId = managerDao.findLastManagerId();
-		if (lastManagerId != null) {
-			manager.setManagerId(++lastManagerId);
+			}
+			logger.info("Maximun Retry count is reached {} ", retryCount);
+			errorController.getErrorController(ErrorCode.FAILED_WHILE_SENDING_MSG_TO_QUEUE);
+
 		}
-
-		persistData(manager);
-
+		logger.info("New Manager Added Succesfully.");
 	}
 
 	/**
@@ -179,11 +231,6 @@ public class ManagerServiceImpl implements ManagerService {
 			user.setUserId(++lastUserId);
 		}
 		manager.setUser(user);
-	}
-
-	private void persistData(Manager manager) {
-		managerDao.save(manager);
-		logger.info("New Manager Added Succesfully.");
 	}
 
 	@Override

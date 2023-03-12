@@ -1,5 +1,7 @@
 package com.cli.bnk.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,34 +19,39 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="USER_INFO")
+@Table(name = "USER_INFO")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class User {
+public class User implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
-	@Column(name="USER_ID")
+	@Column(name = "USER_ID")
 	private long userId;
-	
-	@Column(name="USERNAME")
-	private String userName;
-	
-	@Column(name="PASSWORD")
-	private String password;
-	
-	@Column(name="SECURITY_QUEUSTION")
+
+	@Column(name = "USERNAME")
+	private transient String userName;
+
+	@Column(name = "PASSWORD")
+	private transient String password;
+
+	@Column(name = "SECURITY_QUEUSTION")
 	private String securityQuestion;
-	
-	@Column(name="SECURITY_ANSWER")
+
+	@Column(name = "SECURITY_ANSWER")
 	private String secuirtyAnswer;
-	
+
 	private char role;
-	
+
 	@OneToOne
 	@Cascade(CascadeType.ALL)
-	@JoinColumn(name="USER_PERSON_INFO")
+	@JoinColumn(name = "USER_PERSON_INFO")
 	private PersonInfo personInfo;
 }
