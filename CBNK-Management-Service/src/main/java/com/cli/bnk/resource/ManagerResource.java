@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cli.bnk.dto.ManagerDTO;
+import com.cli.bnk.model.Manager;
 import com.cli.bnk.service.ManagerService;
 
 @RestController
@@ -26,10 +27,16 @@ public class ManagerResource {
 
 	@PostMapping("/save")
 	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-	public ResponseEntity<?> addNewManager(@RequestBody ManagerDTO managerVO) {
-		Thread.currentThread().setName("ManagerResource-" + System.currentTimeMillis() + "-Thread");
-		logger.info("Recived Manager details : {}", managerVO);
-		adminService.addNewManager(managerVO);
-		return new ResponseEntity<>(managerVO, HttpStatus.CREATED);
+	public ResponseEntity<?> addNewManager(@RequestBody ManagerDTO managerVO) throws Exception {
+		Manager manager = null;
+		if (managerVO != null) {
+			Thread.currentThread().setName("ManagerResource-" + System.currentTimeMillis() + "-Thread");
+			logger.info("Recived Manager details : {}", managerVO);
+			manager = adminService.addNewManager(managerVO);
+			if (manager != null) {
+				return new ResponseEntity<>(manager, HttpStatus.CREATED);
+			}
+		}
+		return new ResponseEntity<>("Unable to add New Manager Details", HttpStatus.CREATED);
 	}
 }

@@ -8,8 +8,13 @@ import org.springframework.stereotype.Service;
 import com.cli.bnk.dao.BranchAddressDAO;
 import com.cli.bnk.dao.BranchDao;
 import com.cli.bnk.dto.BranchDTO;
+import com.cli.bnk.exceptionhandler.ElementNotFoundException;
 import com.cli.bnk.model.Branch;
 import com.cli.bnk.model.BranchAddress;
+import com.cli.bnk.outboundmsgsender.BranchMsgSender;
+import com.cli.bnk.util.ApplicationConstant;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -17,6 +22,7 @@ import com.cli.bnk.model.BranchAddress;
  *
  */
 @Service
+@Slf4j
 public class BranchServiceImpl implements BranchService {
 
 	@Autowired
@@ -30,6 +36,11 @@ public class BranchServiceImpl implements BranchService {
 
 	@Autowired
 	private BranchAddressDAO addressDao;
+
+	@Autowired
+	private BranchMsgSender branchMsgSender;
+
+	private int retryCount = 0;
 
 	@Override
 	public void addNewBranch(BranchDTO branchDTO) throws Exception {
@@ -51,11 +62,25 @@ public class BranchServiceImpl implements BranchService {
 			branch.setBranchId(++lastBranchId);
 		}
 
-		persistBranch(branch);
+		branchDao.save(branch);
+		//identifyTopicAndPublishMesssage(branch);
 	}
 
-	private void persistBranch(Branch branch) throws Exception {
-		branchDao.save(branch);
+	private void identifyTopicAndPublishMesssage(Branch branch) throws Exception {
+		try {
+			branchMsgSender.sendNewBranchAddedMsgToParticipantTopic(branch);
+		} catch (Exception e) {
+
+			log.error("Exception occured while publishng message into participant topic.", e);
+
+			if (retryCount < ApplicationConstant.BNK_RETRY_COUNT) {
+				retryCount++;
+				Thread.sleep(retryCount * ApplicationConstant.BNK_WAIT_TIME);
+				log.info("Retrying message again count {} ", retryCount);
+				identifyTopicAndPublishMesssage(branch);
+			}
+
+		}
 	}
 
 	@Override
@@ -66,8 +91,13 @@ public class BranchServiceImpl implements BranchService {
 
 	@Override
 	public Branch findBranchDetailsUsingBranchId(long branchId) {
-		// TODO Auto-generated method stub
-		return null;
+		Branch branch = branchDao.findExistingBranchDetailsUsingBranchId(branchId);
+		if (branch == null) {
+			log.error("Entered Branch Id Details Not Found in Database");
+			throw new ElementNotFoundException();
+		}
+		log.info("Branch Details : {}", branch);
+		return branch;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import com.cli.bnk.model.Manager;
 
 public interface ManagerService {
 
-	public void addNewManager(ManagerDTO managerDTO);
+	public Manager addNewManager(ManagerDTO managerDTO) throws Exception;
 
 	public void updateExistingManagerDetails(ManagerDTO managerDTO);
 

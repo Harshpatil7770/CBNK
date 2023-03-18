@@ -2,7 +2,8 @@ package com.cli.bnk.util;
 
 public enum ErrorCode {
 
-	FAILED_WHILE_SENDING_MSG_TO_QUEUE(501, "Failed while sending message to queue");
+	FAILED_WHILE_SENDING_MSG_TO_QUEUE(501, "Failed while sending message to queue"),
+	DB_CONNECTION_FAILURE(502, "Failed while perfom DataBase operations");
 
 	private int errorCode;
 
@@ -17,7 +18,7 @@ public enum ErrorCode {
 		this.errorCode = errorCode;
 	}
 
-	public int gerErrorCode() {
+	public int getErrorCode() {
 		return errorCode;
 	}
 

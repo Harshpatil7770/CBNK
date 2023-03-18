@@ -17,4 +17,7 @@ public interface BranchDao extends JpaRepository<Branch, Long> {
 	@Query(value = "select * from branch where branch_id=?", nativeQuery = true)
 	Branch isBranchAvailable(long branchId);
 
+	@Query(value = "select * from branch where branch_id=?", nativeQuery = true)
+	Branch findExistingBranchDetailsUsingBranchId(long branchId);
+
 }

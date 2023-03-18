@@ -27,7 +27,6 @@ import com.cli.bnk.model.PersonAddress;
 import com.cli.bnk.model.PersonInfo;
 import com.cli.bnk.model.Role;
 import com.cli.bnk.model.User;
-import com.cli.bnk.outboundmsgsender.ManagementMsgSender;
 import com.cli.bnk.util.ErrorCode;
 import com.cli.bnk.util.ErrorController;
 
@@ -77,8 +76,8 @@ public class ManagerServiceImpl implements ManagerService {
 	@Autowired
 	private PersonAddressDao personAddressDao;
 
-	@Autowired
-	private ManagementMsgSender managementMsgSender;
+//	@Autowired
+//	private ManagementMsgSender managementMsgSender;
 
 	@Autowired
 	private ErrorController errorController;
@@ -95,48 +94,49 @@ public class ManagerServiceImpl implements ManagerService {
 
 	/**
 	 * addNewManager details and assign him branch
+	 * 
+	 * @throws Exception
 	 */
 	@Override
-	public void addNewManager(ManagerDTO managerDTO) {
+	public Manager addNewManager(ManagerDTO managerDTO) throws Exception {
+		/**
+		 * validate the entered branch id is available or not
+		 */
+		validateBrancheDetails(managerDTO);
 
-		try {
-			/**
-			 * validate the entered branch id is available or not
-			 */
-			validateBrancheDetails(managerDTO);
-
-			if (!managerDTO.isOperationDetails()) {
-				logger.error("Entered branch id not available. No Need to procced further.");
-				return;
-			}
-
-			/**
-			 * set manager related info
-			 */
-			validateUserDetails(managerDTO);
-
-			Long lastManagerId = managerDao.findLastManagerId();
-			if (lastManagerId != null) {
-				manager.setManagerId(++lastManagerId);
-			}
-
-			persistData(manager);
-		} catch (Exception e) {
-
-			logger.error("CALLBACK");
+		if (!managerDTO.isOperationDetails()) {
+			logger.error("Entered branch id not available. No Need to procced further.");
+			return null;
 		}
-		logger.info("CALLBACK");
+
+		/**
+		 * set manager related info
+		 */
+		validateUserDetails(managerDTO);
+
+		Long lastManagerId = managerDao.findLastManagerId();
+		if (lastManagerId != null) {
+			manager.setManagerId(++lastManagerId);
+		}
+
+		persistData(manager);
+		try {
+			managerDao.save(manager);
+			logger.info("New Manager Added Succesfully.");
+		} catch (Exception e) {
+			errorController.getErrorController(ErrorCode.DB_CONNECTION_FAILURE);
+		}
+		return manager;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	private void persistData(Manager manager) throws Exception {
 		try {
-			managerDao.save(manager);
-			manager.getUser().setUserName("ENCRYPTED DATA");
-			manager.getUser().setPassword("ENCRYPTED DATA");
-			manager.getUser().setSecurityQuestion("ENCRYPTED DATA");
-			manager.getUser().setSecurityQuestion("ENCRYPTED DATA");
-			managementMsgSender.msgSendingToParticipantQueue(manager);
+//			manager.getUser().setUserName("ENCRYPTED DATA");
+//			manager.getUser().setPassword("ENCRYPTED DATA");
+//			manager.getUser().setSecurityQuestion("ENCRYPTED DATA");
+//			manager.getUser().setSecuirtyAnswer("ENCRYPTED DATA");
+			//managementMsgSender.msgSendingToParticipantQueue(manager);
 		} catch (Exception e) {
 			logger.error("Exception occured while sending msg or saving data to database ", e.getMessage());
 			retryCount++;
@@ -154,7 +154,6 @@ public class ManagerServiceImpl implements ManagerService {
 			errorController.getErrorController(ErrorCode.FAILED_WHILE_SENDING_MSG_TO_QUEUE);
 
 		}
-		logger.info("New Manager Added Succesfully.");
 	}
 
 	/**

@@ -1,0 +1,25 @@
+server:
+ port: 7070
+
+spring:
+  profiles:
+   active:
+    - dev
+    
+  application:
+    name: MANAGEMENT-SERVICE
+   
+  cloud:
+    config:
+      uri:
+      - http://localhost:8888
+   
+  datasource:
+   url: jdbc:mysql://localhost:3306/cbnk_cdb
+ 
+logging:
+  file:
+    path: C:/app/log Files/CBNK-ManagementService/DEBUG/
+    
+
+    

@@ -19,12 +19,18 @@ public class ErrorController {
 			log.error("********* FAILED WHILE SENDING MSG TO QUEUE **********");
 			processShutDownCmd(errorCode);
 			break;
+		case DB_CONNECTION_FAILURE:
+			log.error("******* FAILED WHILE PERFORMING DB OPERATIONS ********");
+			processShutDownCmd(errorCode);
+			break;
 		default:
+			log.error("Unknow Error Type ErrorCode : {} and ErrorDescription : {} ", errorCode.getErrorCode(),
+					errorCode.getErrorDescription());
 		}
 	}
 
 	private void processShutDownCmd(ErrorCode errorCode) {
-		shutDownCMD.loadError(errorCode.gerErrorCode(), errorCode.getErrorDescription());
+		shutDownCMD.loadError(errorCode.getErrorCode(), errorCode.getErrorDescription());
 		shutDownCMD.shutDownApplication();
 	}
 }
