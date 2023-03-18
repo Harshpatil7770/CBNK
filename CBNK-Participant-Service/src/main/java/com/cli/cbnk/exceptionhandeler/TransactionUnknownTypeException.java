@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+/** 
+ *  creaTing runtime exception 
+ *  for compile time extennds exception only
+ */
 public class TransactionUnknownTypeException extends RuntimeException {
 	/**
 	* 

@@ -3,6 +3,7 @@ package com.cli.cbnk.service;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -345,13 +346,15 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 					&& availableBranchDetails.getAddress().getPinCode() == branch.getAddress().getPinCode()) {
 
 				account.setBranchId(branch.getBranchId());
+				//Optional<Long> newAccount=Optional.of(account.getBranchId());
 				log.info("Branch details alreday present.");
 				break;
 			}
 
 		}
 
-		if (account.getBranchId() == null) {
+		Optional<Long> newAccount=Optional.of(account.getBranchId());
+		if (newAccount.isEmpty()) {
 			newBranch.setBranchId(branch.getBranchId());
 			newBranch.setBranchName(branch.getBranchName());
 			newBranch.setPinCode(branch.getPinCode());

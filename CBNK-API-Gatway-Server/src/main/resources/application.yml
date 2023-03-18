@@ -1,0 +1,29 @@
+server:
+ port: 8085
+ 
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active:
+    - dev
+    
+  cloud:
+    gateway:
+      routes:
+      - id : MANAGEMENT-SERVICE
+        uri: http://localhost:7070/
+        predicates:
+        - Path=/api/branch/**
+        - Path=/api/admin/**
+      - id : PARTICIPANT-SERVICE
+        uri: http://localhost:7071/
+        predicates:
+        - Path=/api/customer/**
+    
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    
+
