@@ -217,6 +217,7 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 		personInfo.setAddress(personAddress);
 		user.setPersonInfo(personInfo);
 		customer.setUser(user);
+		
 		customer.setOperation(true);
 	}
 
