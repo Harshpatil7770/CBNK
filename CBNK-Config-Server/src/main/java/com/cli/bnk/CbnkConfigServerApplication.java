@@ -38,25 +38,25 @@ public class  CbnkConfigServerApplication{
 //		application.setDefaultProperties(properties);
 //		application.run(args);
 
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("************* Welcome To CBNK Appplication *********");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			System.err.println(e.getStackTrace());
-		}
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("************** CBNK Config Server Started **********");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("************* Welcome To CBNK Appplication *********");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e) {
+//			System.err.println(e.getStackTrace());
+//		}
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("************** CBNK Config Server Started **********");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
 
 	}
 
