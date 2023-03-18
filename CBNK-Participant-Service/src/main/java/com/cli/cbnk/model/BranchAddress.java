@@ -9,10 +9,12 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "BRANCH_ADDRESS")
 @Getter
+@Setter
 @Component
 public class BranchAddress {
 

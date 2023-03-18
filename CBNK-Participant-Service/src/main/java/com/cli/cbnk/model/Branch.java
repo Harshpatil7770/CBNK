@@ -3,6 +3,7 @@ package com.cli.cbnk.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -12,17 +13,19 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.stereotype.Component;
 
+import lombok.Data;
 import lombok.Getter;
 
 @Entity
 @Component
 @Table(name = "BRANCH")
 @Getter
+@Data
 public class Branch {
 
 	@Id
-	@GeneratedValue
 	@Column(name = "BRANCH_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long branchId;
 
 	@Column(name = "BRANCH_NAME")

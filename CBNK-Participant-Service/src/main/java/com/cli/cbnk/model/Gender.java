@@ -18,10 +18,10 @@ public enum Gender {
 		return genderType;
 	}
 
-	public static Gender verifyGenders(char genderType) {
+	public static char verifyGenders(char genderType) {
 		for (Gender existingType : Gender.values()) {
 			if (existingType.getGenderType() == genderType) {
-				return existingType;
+				return existingType.getGenderType();
 			}
 		}
 		throw new RuntimeException("Unknow Gender Type");

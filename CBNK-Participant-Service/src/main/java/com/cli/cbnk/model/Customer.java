@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -16,33 +17,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "USER_INFO")
+@Table(name = "CUSTOMER")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class User {
+public class Customer {
 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@GeneratedValue
-	@Column(name = "USER_ID")
-	private long userId;
+	@Column(name = "CUSTOMER_ID")
+	private long custmerId;
 
-	@Column(name = "USERNAME")
-	private String userName;
-
-	@Column(name = "PASSWORD")
-	private String password;
-
-	@Column(name = "SECURITY_QUEUSTION")
-	private String securityQuestion;
-
-	@Column(name = "SECURITY_ANSWER")
-	private String secuirtyAnswer;
-
-	private char role;
-
+	@JoinColumn(name = "CUSTOMER_USER_ID")
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_person_id")
-	private PersonInfo personInfo;
+	private User User;
+
+	@JoinColumn(name = "CUSTOMER_ACCOUNT_NUMBER")
+	@OneToOne(cascade = CascadeType.ALL)
+	private Account account;
+
+	@Column(name = "IS_OPERATION")
+	private boolean isOperation;
+
 }

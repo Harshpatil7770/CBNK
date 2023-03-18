@@ -7,21 +7,21 @@ public enum Role {
 	private char userType;
 
 	private Role(char userType) {
-		this.userType= userType;
-	}
-
-	public char getId() {
-		return userType;
-	}
-
-	public void setId(char userType) {
 		this.userType = userType;
 	}
 
-	public static Role getAppropriateRole(char userType) {
+	public char getUserType() {
+		return userType;
+	}
+
+	public void setUserType(char userType) {
+		this.userType = userType;
+	}
+
+	public static char getAppropriateRole(char userType) {
 		for (Role role : Role.values()) {
-			if (role.getId() == userType) {
-				return role;
+			if (role.getUserType() == userType) {
+				return role.getUserType();
 			}
 		}
 		throw new RuntimeException("Unable to identity user type");

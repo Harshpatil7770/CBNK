@@ -48,7 +48,11 @@ public class PersonInfo {
 
 	@OneToOne
 	@Cascade(CascadeType.ALL)
-	@JoinColumn(name="PERSON_ADDRESS_ID")
+	@JoinColumn(name = "PERSON_ADDRESS_ID")
 	private PersonAddress address;
+
+//	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
+//	@JoinColumn(name = "person_user_id")
+//	private User user;
 
 }
