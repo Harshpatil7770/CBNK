@@ -19,13 +19,13 @@ public class CbnkEurekaServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CbnkEurekaServerApplication.class, args);
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("************** CBNK Eureka Server Started **********");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
-		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("************** CBNK Eureka Server Started **********");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
+//		System.out.println("****************************************************");
 
 		/**
 		 * What is purpose of eureka server and How to create it?
