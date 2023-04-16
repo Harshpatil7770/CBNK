@@ -3,7 +3,6 @@ package com.cli.bnk.service;
 import java.util.List;
 
 import com.cli.bnk.dto.ManagerDTO;
-import com.cli.bnk.model.Branch;
 import com.cli.bnk.model.Manager;
 
 public interface ManagerService {

@@ -3,7 +3,7 @@ package com.cli.cbnk.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-	
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,7 +33,7 @@ public class AccountDTO {
 //	@JoinColumn(name = "BRANCH_BRANCH_ID")
 	private long branchId;
 
-	private SavingAccountDTO savingAccountDTO;
+	private long savingAccountId;
 
-	private CurrentAccountDTO currentAccountDTO;
+	private long currentAccountId;
 }

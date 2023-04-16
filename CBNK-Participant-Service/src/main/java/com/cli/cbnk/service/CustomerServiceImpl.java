@@ -18,6 +18,7 @@ import com.cli.cbnk.dao.PersonAddressDao;
 import com.cli.cbnk.dao.PersonInfoDao;
 import com.cli.cbnk.dao.SavingAccountDao;
 import com.cli.cbnk.dao.TransactionDao;
+import com.cli.cbnk.dto.CustomerCustomDTO;
 import com.cli.cbnk.dto.CustomerDTO;
 import com.cli.cbnk.exceptionhandeler.IllegalArgumentException;
 import com.cli.cbnk.listener.BranchTopicMsgListener;
@@ -38,6 +39,7 @@ import com.cli.cbnk.model.User;
 import com.cli.cbnk.producer.PartcipantMsgProducer;
 import com.cli.cbnk.service.util.AccountNumberGeneration;
 import com.cli.cbnk.service.util.BNKMessageProcessingObject;
+import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -108,6 +110,9 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 	@Autowired
 	private CurrentAccount currentAccount;
 
+//	@Autowired
+//	private PartcipantMsgProducer 
+
 	private static final Long INITIAL_ID = 1l;
 
 	private static final String SAVING_ACCOUNT = "SAVING";
@@ -119,6 +124,15 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 
 	@Autowired
 	private CurrentAccountDao currentAccountDao;
+
+	@Autowired
+	private CustomerCustomDTO customerCustomDTO;
+
+	private static String INTITIAL_INTEREST_RATE = "6.9";
+
+	private static String INITIAL_TRANSACTION_LIMIT = "20000";
+
+	private static String INITIAL_PER_DAY_TRANS_VALUE = "3";
 
 	@Override
 	public Customer addNewCustomer(CustomerDTO customerDTO) {
@@ -148,16 +162,29 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 			 * checking last customer id
 			 */
 			Long existingCustomerId = customerDao.findMaxExistingId();
-			if (existingCustomerId == null) {
+			boolean existingCustomerIdResult = (existingCustomerId == null) ? true : false;
+			if (existingCustomerIdResult)
 				customer.setCustmerId(INITIAL_ID);
-			} else {
+			else
 				customer.setCustmerId(++existingCustomerId);
-			}
+
 			customerDao.save(customer);
+
+			identifyTopicAndPublishMessage(customer);
+
 			return customer;
 		} catch (InterruptedException e) {
 			throw new RuntimeException();
 		}
+	}
+
+	private void identifyTopicAndPublishMessage(Customer customer) {
+
+		customerCustomDTO.setAccountNumber(customer.getAccount().getAccountNumber());
+		customerCustomDTO.setUserName(customer.getUser().getUserName());
+		customerCustomDTO.setUserName(customer.getUser().getPassword());
+		partcipantMsgProducer.sendingMsgToPasswordTopic(customerCustomDTO);
+
 	}
 
 	private boolean isUserEnteredDetailsCorrect(boolean isOperations) {
@@ -182,7 +209,8 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 			return;
 		}
 		Character userRoleType = Role.getAppropriateRole(customerDTO.getUserDTO().getRole());
-		if (userRoleType != null) {
+		boolean userRoleTypeResult = (userRoleType != null) ? true : false;
+		if (userRoleTypeResult) {
 			user.setRole(userRoleType);
 		}
 		user.setSecurityQuestion(customerDTO.getUserDTO().getSecurityQuestion());
@@ -218,7 +246,7 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 		personInfo.setAddress(personAddress);
 		user.setPersonInfo(personInfo);
 		customer.setUser(user);
-		
+
 		customer.setOperation(true);
 	}
 
@@ -235,38 +263,39 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 		 */
 		if (customerDTO.getAccountDTO().getAccountType() != null) {
 			String enteredAccountType = AccountType.selectAccountType(customerDTO.getAccountDTO().getAccountType());
-			if (enteredAccountType != null) {
+			boolean enteredAccountTypeResult = (enteredAccountType != null) ? true : false;
+			if (enteredAccountTypeResult) {
 				account.setAccountType(enteredAccountType);
 			}
-			if (enteredAccountType.equals(SAVING_ACCOUNT)) {
-				Long lastSavingAccId = savingAccountDao.findLastSavingAccountId();
-				if (lastSavingAccId == null) {
-					savingAccount.setSavingAccountId(INITIAL_ID);
-				} else {
-					savingAccount.setSavingAccountId(++lastSavingAccId);
-				}
-				savingAccount.setMinimumBalance(initialDepositeMoney);
-				savingAccount.setInterestRate(customerDTO.getAccountDTO().getSavingAccountDTO().getInterestRate());
-				savingAccount.setTransactionAmountLimit(
-						customerDTO.getAccountDTO().getSavingAccountDTO().getTransactionAmountLimit());
-				savingAccount
-						.setTransactionLimit(customerDTO.getAccountDTO().getSavingAccountDTO().getTransactionLimit());
-				account.setSavingAccount(savingAccount);
-			}
-			if (enteredAccountType.equals(CURRENT_ACCOUNT)) {
-				Long lastCurrActId = currentAccountDao.findLastCurrenctAcntId();
-				if (lastCurrActId == null) {
-					currentAccount.setCurrentAccountId(INITIAL_ID);
-				} else {
-					currentAccount.setCurrentAccountId(++lastCurrActId);
-				}
-				currentAccount.setMinimumBalance(initialDepositeMoney);
-				currentAccount.setDailyTransactionsLimit(
-						customerDTO.getAccountDTO().getCurrentAccountDTO().getDailyTransactionsLimit());
-				currentAccount.setTransactionAmountLimit(
-						customerDTO.getAccountDTO().getCurrentAccountDTO().getTransactionAmountLimit());
-				account.setCurrentAccount(currentAccount);
-			}
+//			if (enteredAccountType.equals(SAVING_ACCOUNT)) {
+//				Long lastSavingAccId = savingAccountDao.findLastSavingAccountId();
+//				boolean lastSavingAccIdResult = (lastSavingAccId == null) ? true : false;
+//				if (lastSavingAccIdResult)
+//					savingAccount.setSavingAccountId(INITIAL_ID);
+//				else
+//					savingAccount.setSavingAccountId(++lastSavingAccId);
+//
+//				savingAccount.setMinimumBalance(initialDepositeMoney);
+//				savingAccount.setInterestRate(Double.parseDouble(INTITIAL_INTEREST_RATE));
+//				savingAccount.setTransactionAmountLimit(Double.valueOf(INITIAL_TRANSACTION_LIMIT));
+//				savingAccount.setTransactionLimit(Integer.valueOf(INITIAL_PER_DAY_TRANS_VALUE));
+//				account.setSavingAccount(savingAccount);
+//			}
+//			if (enteredAccountType.equals(CURRENT_ACCOUNT)) {
+//				Long lastCurrActId = currentAccountDao.findLastCurrenctAcntId();
+//				boolean lastCurrActIdResult = (lastCurrActId == null) ? true : false;
+//				if (lastCurrActIdResult)
+//					currentAccount.setCurrentAccountId(INITIAL_ID);
+//				else
+//					currentAccount.setCurrentAccountId(++lastCurrActId);
+//
+//				currentAccount.setMinimumBalance(initialDepositeMoney);
+//				currentAccount.setDailyTransactionsLimit(
+//						customerDTO.getAccountDTO().getCurrentAccountDTO().getDailyTransactionsLimit());
+//				currentAccount.setTransactionAmountLimit(
+//						customerDTO.getAccountDTO().getCurrentAccountDTO().getTransactionAmountLimit());
+//				account.setCurrentAccount(currentAccount);
+//			}
 		}
 		if (customerDTO.getAccountDTO().getAccountType() == null) {
 			log.error("Account type is manadatory. No Need to proceed further.");
@@ -346,14 +375,14 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 					&& availableBranchDetails.getAddress().getPinCode() == branch.getAddress().getPinCode()) {
 
 				account.setBranchId(branch.getBranchId());
-				//Optional<Long> newAccount=Optional.of(account.getBranchId());
+				// Optional<Long> newAccount=Optional.of(account.getBranchId());
 				log.info("Branch details alreday present.");
 				break;
 			}
 
 		}
 
-		Optional<Long> newAccount=Optional.of(account.getBranchId());
+		Optional<Long> newAccount = Optional.of(account.getBranchId());
 		if (newAccount.isEmpty()) {
 			newBranch.setBranchId(branch.getBranchId());
 			newBranch.setBranchName(branch.getBranchName());
@@ -370,6 +399,31 @@ public class CustomerServiceImpl extends BranchTopicMsgListener implements Custo
 			customer.setOperation(true);
 			account.setBranchId(branch.getBranchId());
 		}
+	}
+
+	@Override
+	public void deleteCustomerAccount(long accountId, String userName, String password) {
+		Optional<Customer> existingCustomer = customerDao.findById(accountId);
+		if (existingCustomer == null) {
+			log.error("Entered id is not found. No need to proceed further.");
+			throw new IllegalArgumentException();
+		}
+		if (!existingCustomer.get().getUser().getUserName().equals(userName)) {
+			log.error("Entered username is not matched. No need to proceed further.");
+			throw new IllegalArgumentException();
+		}
+		if (!existingCustomer.get().getUser().getPassword().equals(password)) {
+			log.error("Entered password is not matched. No need to proceed further.");
+			throw new IllegalArgumentException();
+		}
+		customerDao.deleteById(accountId);
+		Customer isPresent = customerDao.findCustomerDetailsById(accountId);
+		boolean result = (isPresent == null) ? true : false;
+
+		if (result)
+			log.info("Deleted customer details succesfully!");
+		else
+			log.error("Unable to delete the customer details.");
 	}
 
 }

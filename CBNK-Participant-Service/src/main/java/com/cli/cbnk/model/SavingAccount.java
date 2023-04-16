@@ -3,6 +3,7 @@ package com.cli.cbnk.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -22,6 +23,7 @@ public class SavingAccount {
 
 	@Id
 	@Column(name = "SAVING_ACCOUNT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long savingAccountId;
 
 	@Column(name = "INTEREST_RATE")
@@ -35,4 +37,7 @@ public class SavingAccount {
 
 	@Column(name = "TRANSACTION_AMOUNT_LIMIT")
 	private double transactionAmountLimit;
+	
+	@Column(name = "ACCOUNT_TYPE")
+	private String accountType;
 }
