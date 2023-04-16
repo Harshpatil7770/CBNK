@@ -26,4 +26,13 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
     
+    
+log:
+ generateFileLocation: 'C:/app/log Files/CBNK-API Gateway/'   
+   
+logging:
+  file:
+    name: ${log.generateFileLocation}/apiGateway.log
+    #path: C:/app/log Files/CBNK-ManagementService/DEBUG/   
+    
 

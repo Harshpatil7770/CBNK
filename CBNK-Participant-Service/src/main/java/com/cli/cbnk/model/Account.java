@@ -33,13 +33,11 @@ public class Account {
 	@Column(name = "ACCOUNT_TYPE")
 	private String accountType;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "CUSTOMER_SAVING_ACCOUNT_ID")
-	private SavingAccount savingAccount;
+	@Column(name = "CUSTOMER_SAVING_ACCOUNT_ID")
+	private Long savingAccountId;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "CUSTOMER_CURRENT_ACCOUNT_ID")
-	private CurrentAccount currentAccount;
+	@Column(name = "CUSTOMER_CURRENT_ACCOUNT_ID")
+	private Long currentAccountId;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ACCOUNT_TRANSACTION_ID")

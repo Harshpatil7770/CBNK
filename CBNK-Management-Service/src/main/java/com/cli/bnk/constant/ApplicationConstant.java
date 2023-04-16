@@ -1,4 +1,4 @@
-package com.cli.bnk.util;
+package com.cli.bnk.constant;
 
 import org.springframework.stereotype.Component;
 

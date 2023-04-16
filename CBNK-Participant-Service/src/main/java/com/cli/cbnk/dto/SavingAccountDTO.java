@@ -13,7 +13,6 @@ public class SavingAccountDTO {
 
 	private double interestRate;
 
-
 	private double minimumBalance;
 
 	private int transactionLimit;

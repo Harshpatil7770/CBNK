@@ -1,0 +1,7 @@
+#log:
+# generateFileLocation: 'C:/app/log Files/CBNK-ParticipantService/Debug/'   
+#   
+#logging:
+#  file:
+#    name: ${log.generateFileLocation}/participantService.log
+#    #path: C:/app/log Files/CBNK-ManagementService/DEBUG/ 

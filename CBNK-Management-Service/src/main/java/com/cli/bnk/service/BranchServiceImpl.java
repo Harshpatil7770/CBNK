@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cli.bnk.constant.ApplicationConstant;
 import com.cli.bnk.dao.BranchAddressDAO;
 import com.cli.bnk.dao.BranchDao;
 import com.cli.bnk.dto.BranchDTO;
@@ -12,7 +13,6 @@ import com.cli.bnk.exceptionhandler.ElementNotFoundException;
 import com.cli.bnk.model.Branch;
 import com.cli.bnk.model.BranchAddress;
 import com.cli.bnk.outboundmsgsender.BranchMsgSender;
-import com.cli.bnk.util.ApplicationConstant;
 
 import lombok.extern.slf4j.Slf4j;
 

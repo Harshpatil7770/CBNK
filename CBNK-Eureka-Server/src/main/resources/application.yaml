@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active:
+    - dev
+    
+server:
+  port: 8761
+  
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false 
+
+
+log:
+ generateFileLocation: 'C:/app/log Files/Eureka-Server/'   
+   
+logging:
+  file:
+    name: ${log.generateFileLocation}/eurekaServer.log
+    #path: C:/app/log Files/CBNK-ManagementService/DEBUG/ 

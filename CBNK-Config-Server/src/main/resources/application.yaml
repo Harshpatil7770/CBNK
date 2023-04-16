@@ -1,0 +1,7 @@
+log:
+ generateFileLocation: 'C:/app/log Files/Config-Server/'   
+   
+logging:
+  file:
+    name: ${log.generateFileLocation}/configServer.log
+    #path: C:/app/log Files/CBNK-ManagementService/DEBUG/ 

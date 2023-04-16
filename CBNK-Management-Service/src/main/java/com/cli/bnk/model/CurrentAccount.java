@@ -1,4 +1,4 @@
-package com.cli.cbnk.model;
+package com.cli.bnk.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "CURRENCT_ACCOUNT")
+@Table(name="CURRENCT_ACCOUNT")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,23 +22,19 @@ import lombok.NoArgsConstructor;
 public class CurrentAccount {
 
 	@Id
-	@Column(name = "ACCOUNT_ID")
+	@Column(name="ACCOUNT_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long currentAccountId;
-
-	@Column(name = "INTEREST_RATE")
-	private double interestRate;
-
-	@Column(name = "DAILY_TRANSACTION_LIMIT")
+	
+	@Column(name="DAILY_TRANSACTION_LIMIT")
 	private int dailyTransactionsLimit;
-
-	@Column(name = "MINIMUM_BALANCE")
+	
+	@Column(name="MINIMUM_BALANCE")
 	private double minimumBalance;
-
-	@Column(name = "TRANSACTION_AMOUNT_LIMIT")
+	
+	@Column(name="TRANSACTION_AMOUNT_LIMIT")
 	private double transactionAmountLimit;
 	
 	@Column(name="ACCOUNT_TYPE")
 	private String accountType;
-
 }

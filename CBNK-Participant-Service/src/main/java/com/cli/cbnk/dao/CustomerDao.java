@@ -9,8 +9,11 @@ import com.cli.cbnk.model.Customer;
 @Repository
 public interface CustomerDao extends JpaRepository<Customer, Long> {
 
-	@Query(value = "select max(CUSTOMER_ID) from customer c inner join user_info u on c.customer_user_id=u.user_id inner join personal_info pi on pi.person_id=u.user_person_id inner join ACCOUNT ac on ac.ACCOUNT_NUMBER=c.CUSTOMER_ACCOUNT_NUMBER",nativeQuery = true)
+	@Query(value = "select max(CUSTOMER_ACCOUNT_NUMBER) from customer c inner join user_info u on c.customer_user_id=u.user_id inner join personal_info pi on pi.person_id=u.user_person_id inner join ACCOUNT ac on ac.ACCOUNT_NUMBER=c.CUSTOMER_ACCOUNT_NUMBER",nativeQuery = true)
 	Long findMaxExistingId();
+
+	@Query(value = "select * from customer where CUSTOMER_ACCOUNT_NUMBER=?",nativeQuery = true)
+	Customer findCustomerDetailsById(long accountId);
 	
 //	@Query(value="BEGIN;    \r\n"
 //			+ "insert into customer values(?,?,?,?);\r\n"
